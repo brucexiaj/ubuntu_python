@@ -179,3 +179,53 @@ print my_dict['age']
 print my_dict.has_key('sex')
 
 
+#test
+#在指定目录下查找指定文件
+import os
+def sameLayerNextDir(t):
+    pathList=t.split('/')
+    lastPathLen=len(pathList[len(pathList)-1])
+    preDir=t[0:len(t)-lastPathLen-1]
+    fileName=t[len(t)-lastPathLen:]
+    preDirFiles=os.listdir(preDir)
+    for i in range(len(preDirFiles)):
+        if(preDirFiles[i]==fileName and i!=len(preDirFiles)-1):
+            return preDir+'/'+preDirFiles[i+1]
+    return 0
+def lastLayerDir(t):
+    pathList = t.split('/')
+    lastPathLen = len(pathList[len(pathList) - 1])
+    preDir = t[0:len(t) - lastPathLen - 1]
+    return preDir
+def extractFile(t):
+    pathList = t.split('/')
+    lastPathLen = len(pathList[len(pathList) - 1])
+    preFile = t[len(t)-lastPathLen:]
+    return preFile
+def nextDirectory(t):
+    while (sameLayerNextDir(t) == 0):
+        t = lastLayerDir(t)
+    t = sameLayerNextDir(t)
+    return t
+startDir='/home'
+currentDir=startDir
+targetFile='eclipse.ini'
+currentDirFiles=os.listdir(currentDir)
+currentDir=currentDir+"/"+currentDirFiles[0]
+while True:
+    if(len(currentDir)<=len(startDir)):
+        print "search finished!"
+        break
+    if(os.path.isdir(currentDir)):
+        currentDirFiles = os.listdir(currentDir)
+        if(len(currentDirFiles)>0):
+            currentDir = currentDir + "/" + currentDirFiles[0]
+        else:
+            currentDir=nextDirectory(currentDir)
+    elif(extractFile(currentDir)==targetFile):
+        print currentDir
+        currentDir = nextDirectory(currentDir)
+    else:
+        currentDir = nextDirectory(currentDir)
+print "down"
+
